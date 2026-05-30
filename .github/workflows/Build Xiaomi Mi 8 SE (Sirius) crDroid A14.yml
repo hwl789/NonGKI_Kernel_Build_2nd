@@ -92,7 +92,8 @@ env:
 jobs:
   build-kernel:
     name: Build Kernel
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
+    container: ubuntu:focal
     env:
       CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
       CCACHE_NOHASHDIR: "true"
