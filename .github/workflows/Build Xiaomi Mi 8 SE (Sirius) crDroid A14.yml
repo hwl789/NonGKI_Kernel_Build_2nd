@@ -15,8 +15,8 @@ env:
   KERNEL_SOURCE : "https://github.com/Rocky7842/android_kernel_xiaomi_sdm710.git"
   KERNEL_BRANCH : "lineage-23.2-ksu"
 
-  CLANG_SOURCE : "https://gitlab.com/LeCmnGend/proton-clang/-/archive/clang-13/proton-clang-clang-13.tar.gz"
-  CLANG_BRANCH : ""
+  CLANG_SOURCE : "https:///kdrag0n/proton-clang.git"
+  CLANG_BRANCH : "master"
 
   GCC_GNU : false
   GCC_64_SOURCE : "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9.git"
