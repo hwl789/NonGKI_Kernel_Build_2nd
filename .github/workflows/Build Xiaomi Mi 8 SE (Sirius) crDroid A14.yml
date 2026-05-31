@@ -91,7 +91,7 @@ env:
 
 jobs:
   build-kernel:
-    name: Build Kernel
+    name: Xiaomi Mi 8 SE (Sirius) crDroid A14
     runs-on: ubuntu-latest
     container: ubuntu:focal
     env:
@@ -129,12 +129,7 @@ jobs:
 
       - name: 🚀 Build Process
         uses: ./.github/workflows/build-process
-        env:
-          ARCH: arm64
-          CC: clang
-          CROSS_COMPILE: aarch64-linux-gnu-
-          LD: /usr/bin/aarch64-linux-gnu-ld
-          LD_FLAGS: -fuse-ld=bfd
+    
 
       - name: 🔩 Pack Process
         uses: ./.github/workflows/pack-process
