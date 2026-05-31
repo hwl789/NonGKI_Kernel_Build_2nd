@@ -128,7 +128,13 @@ jobs:
         uses: ./.github/workflows/patch-baseband-guard
 
       - name: 🚀 Build Process
-        uses: ./.github/workflows/build-process
+        run: |
+          make O=out ARCH=arm64 \
+               CROSS_COMPILE=aarch64-linux-gnu- \
+               CC=clang \
+               LD=aarch64-linux-gnu-ld \
+               LD_LIBRARY_PATH=${{ env.CLANG_PATH }}/lib:$LD_LIBRARY_PATH \
+               -j$(nproc)
 
       - name: 🔩 Pack Process
         uses: ./.github/workflows/pack-process
