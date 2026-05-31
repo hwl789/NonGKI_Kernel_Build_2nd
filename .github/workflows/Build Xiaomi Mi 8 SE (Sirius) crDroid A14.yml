@@ -9,8 +9,8 @@ env:
   DEVICE_NAME : "Xiaomi_Mi_8_SE"
   DEVICE_CODENAME : "sirius"
 
-  CUSTOM_CMDS : ""
-  EXTRA_CMDS : ""
+  CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-"
+  EXTRA_CMDS : "LD=ld.lld LLVM=1 LLVM_IAS=1"
 
   KERNEL_SOURCE : "https://github.com/Rocky7842/android_kernel_xiaomi_sdm710.git"
   KERNEL_BRANCH : "lineage-23.2-ksu"
