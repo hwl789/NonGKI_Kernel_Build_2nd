@@ -129,6 +129,12 @@ jobs:
 
       - name: 🚀 Build Process
         uses: ./.github/workflows/build-process
+        env:
+          CROSS_COMPILE: "aarch64-linux-gnu-"
+          LD: "aarch64-linux-gnu-ld"
+          LD_LIBRARY_PATH: "${{ env.CLANG_PATH }}/lib:$LD_LIBRARY_PATH"
+          CC: "clang"
+          ARCH: "arm64"
 
       - name: 🔩 Pack Process
         uses: ./.github/workflows/pack-process
