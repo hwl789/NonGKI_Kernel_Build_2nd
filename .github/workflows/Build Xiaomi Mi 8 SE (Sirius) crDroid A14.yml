@@ -5,80 +5,79 @@ on:
   workflow_dispatch:
 
 env:
-  # ===== 设备配置 =====
+  # ===== Device env =====
   DEVICE_NAME: "Xiaomi_Mi_8_SE"
   DEVICE_CODENAME: "sirius"
 
-  # ===== 编译参数（稳定组合）=====
+  # ===== 编译参数（修正版）=====
   CUSTOM_CMDS: ""
   EXTRA_CMDS: ""
 
-  # ===== 内核 =====
+  # ===== Kernel =====
   KERNEL_SOURCE: "https://github.com/Rocky7842/android_kernel_xiaomi_sdm710.git"
   KERNEL_BRANCH: "lineage-23.2-ksu"
 
-  # ===== Toolchain =====
+  # ===== Clang（可选，默认关闭）=====
   CLANG_SOURCE: ""
   CLANG_BRANCH: ""
 
+  # ===== GCC（必须）=====
   GCC_GNU: true
-  GCC_64_SOURCE: "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9.git"
+  GCC_64_SOURCE: "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9"
   GCC_64_BRANCH: "android12L-release"
-  GCC_32_SOURCE: "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9.git"
+  GCC_32_SOURCE: "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9"
   GCC_32_BRANCH: "android12L-release"
 
   # ===== Defconfig =====
   DEFCONFIG_NAME: "sdm670-perf_defconfig"
-  DEFCONFIG_SOURCE: ""
-  DEFCONFIG_ORIGIN_IMAGE: ""
-  DEFCONFIG_FROM_BOOT: false
 
   # ===== KernelSU =====
   KERNELSU_AUTO_GET: "true"
   KERNELSU_AUTO_FORK: "resukisu"
-  KERNELSU_SOURCE: ""
-  KERNELSU_BRANCH: ""
 
-  # ===== 实验性功能（全部关闭）=====
+  # ===== 功能开关 =====
   SUSFS_ENABLE: false
-  SUSFS_FIXED: false
   REKERNEL_ENABLE: "false"
   KPM_ENABLE: "false"
   BASEBAND_GUARD_ENABLE: "false"
 
-  # ===== 打包 =====
+  # ===== Packing =====
   PACK_METHOD: "Anykernel3"
   PACK_KMODULES: "false"
   AK3_SOURCE: "https://github.com/osm0sis/AnyKernel3.git"
   AK3_BRANCH: "master"
 
-  # ===== 其他 =====
+  # ===== Misc =====
   BUILD_OTHER_CONFIG: true
   MERGE_CONFIG_FILES: "xiaomi/sdm710-common.config"
-
   FREE_MORE_SPACE: true
   BUILD_DEBUGGER: true
   SKIP_PATCH: false
 
 jobs:
   build-kernel:
-    name: Build Sirius Kernel
+    name: Xiaomi Mi 8 SE (Sirius)
     runs-on: ubuntu-latest
     container: ubuntu:focal
+
+    env:
+      CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
+      CCACHE_NOHASHDIR: "true"
+      CCACHE_HARDLINK: "true"
 
     steps:
       - name: ⏰ Checkout
         uses: actions/checkout@v6
 
-      - name: ⌛️ 编译环境准备
+      - name: ⌛️ Build environment
         uses: ./.github/workflows/build-env
 
-      - name: ⚙️ 获取必要工具
+      - name: ⚙️ Get tools
         uses: ./.github/workflows/build-ready
 
-      - name: 🪛 内核额外选项（关键修复）
+      - name: 🪛 Extra Kernel Options
         run: |
-          cd device_kernel
+          cd $GITHUB_WORKSPACE/device_kernel
           ./scripts/config --file out/.config \
             -d CONFIG_VDSO \
             -d CONFIG_COMPAT_VDSO \
@@ -86,11 +85,11 @@ jobs:
             -d CONFIG_UPROBES
           make O=out olddefconfig
 
-      - name: 🚀 开始编译
+      - name: 🚀 Build Process
         uses: ./.github/workflows/build-process
 
-      - name: 🔩 打包内核
+      - name: 🔩 Pack Process
         uses: ./.github/workflows/pack-process
 
-      - name: ✏️ 上传产物
+      - name: ✏️ Upload Artifacts
         uses: ./.github/workflows/upload-files
